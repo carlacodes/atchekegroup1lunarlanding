@@ -2,6 +2,7 @@ import io
 import os
 import glob
 import torch
+import pip
 import base64
 # import stable_baselines3
 
@@ -143,4 +144,5 @@ plt.plot(x, y)
 plt.ylim([-300, 300])
 plt.xlabel('Timesteps')
 plt.ylabel('Episode Rewards')
+plt.title('Carl parameters model')
 plt.show()
