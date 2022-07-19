@@ -42,7 +42,7 @@ env = stable_baselines3.common.monitor.Monitor(env, log_dir )
 callback = EvalCallback(env,log_path = log_dir, deterministic=True) #For evaluating the performance of the agent periodically and logging the results.
 policy_kwargs = dict(activation_fn=torch.nn.ReLU,
                      net_arch=nn_layers)
-model = DQN("MlpPolicy", env,policy_kwargs = policy_kwargs,
+model_old = DQN("MlpPolicy", env,policy_kwargs = policy_kwargs,
             learning_rate=learning_rate,
             batch_size=1,  #for simplicity, we are not doing batch update.
             buffer_size=1, #size of experience of replay buffer. Set to 1 as batch update is not done
@@ -62,7 +62,26 @@ model = DQN("MlpPolicy", env,policy_kwargs = policy_kwargs,
             # exploration_final_eps = 0.05  # (set by defualt) final value of random action probability. Range is between 0 and 1.
             seed = 1, #seed for the pseudo random generators
             verbose=0) #Set verbose to 1 to observe training logs. We encourage you to set the verbose to 1.
+model_test = DQN("MlpPolicy", env,policy_kwargs =policy_kwargs,
+            learning_rate=6.3e-4,
+            batch_size=128,  #for simplicity, we are not doing batch update.
+            buffer_size=50000, #size of experience of replay buffer. Set to 1 as batch update is not done
+            learning_starts=0, #learning starts immediately!
+            gamma=0.99, #discount facto. range is between 0 and 1.
+            tau = 1,  #the soft update coefficient for updating the target network
+            target_update_interval=250, #update the target network immediately.
+            train_freq=(4,"step"), #train the network at every step.
+            #max_grad_norm = 10, #the maximum value for the gradient clipping
+            exploration_initial_eps = 0.9, #initial value of random action probability
+            exploration_fraction = 0.8, #fraction of entire training period over which the exploration rate is reduced
+            gradient_steps = -1, #number of gradient steps,
+            exploration_final_eps = 0.1,
 
+            # exploration_initial_eps = 1  # initial value of random action probability. Range is between 0 and 1.
+            # exploration_fraction = 0.5  # fraction of entire training period over which the exploration rate is reduced. Range is between 0 and 1.
+            # exploration_final_eps = 0.05  # (set by defualt) final value of random action probability. Range is between 0 and 1.
+            seed = 1, #seed for the pseudo random generators
+            verbose=1) #Set verbose to 1 to observe training logs. We encourage you to set the verbose to 1.
 # You can also experiment with other RL algorithms like A2C, PPO, DDPG etc. Refer to  https://stable-baselines3.readthedocs.io/en/master/guide/examples.html
 #for documentation. For example, if you would like to run DDPG, just replace "DQN" above with "DDPG".
 #
