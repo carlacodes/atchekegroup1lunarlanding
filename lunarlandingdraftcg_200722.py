@@ -44,7 +44,7 @@ nn_layers = [64,64] #This is the configuration of your neural network. Currently
 
 learning_rate = 0.001 #This is the step-size with which the gradient descent is carried out.
 #Tip: Use smaller step-sizes for larger networks.
-env = gym.make('LunarLander-v3')
+env = gym.make('LunarLander-v2')
 log_dir = "/tmp/gym2007/"
 log_dir='C:/Users/carla/PycharmProjects/atchekegroup1lunarlanding/gym/'
 os.makedirs(log_dir, exist_ok=True)
@@ -144,12 +144,12 @@ plt.plot(x, y)
 plt.ylim([-300, 300])
 plt.xlabel('Timesteps')
 plt.ylabel('Episode Rewards')
-plt.title('Carl parameters model, trained on enviornment with wind')
+plt.title('Carl parameters model, trained on regular environment')
 plt.show()
 
 
 #run corresponding video with wind
-env2 = (gym.make("LunarLander-v3"))
+env2 = (gym.make("LunarLander-v2"))
 observation = env2.reset()
 while True:
   env2.render()
