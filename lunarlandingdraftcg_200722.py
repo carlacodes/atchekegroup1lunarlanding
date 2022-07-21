@@ -144,5 +144,18 @@ plt.plot(x, y)
 plt.ylim([-300, 300])
 plt.xlabel('Timesteps')
 plt.ylabel('Episode Rewards')
-plt.title('Carl parameters model')
+plt.title('Carl parameters model, trained on enviornment with wind')
 plt.show()
+
+
+#run corresponding video with wind
+env2 = (gym.make("LunarLander-v3"))
+observation = env2.reset()
+while True:
+  env2.render()
+  action, _states = model_test.predict(observation, deterministic=True)
+  observation, reward, done, info = env2.step(action)
+  if done:
+    break;
+
+env2.close()
