@@ -6,8 +6,6 @@ import pip
 import base64
 # import stable_baselines3
 
-
-import numpy as np
 import matplotlib.pyplot as plt
 import stable_baselines3
 import gym
@@ -148,26 +146,7 @@ Utility functions to enable video recording of gym environment
 and displaying it.
 To enable video, just do "env = wrap_env(env)""
 """
-#
 
-# test_env = (gym.make("LunarLander-v4"))
-# observation = test_env.reset()
-# total_reward = 0
-# while True:
-#   test_env.render()
-#   # for _ in range(1000):
-#   #     env.render()
-#   test_env.step(env.action_space.sample())
-#   #
-#   # env.close()
-#   action, states = model_old.predict(observation, deterministic=True)
-#   observation, reward, done, info = test_env.step(action)
-#   total_reward += reward
-#   if done:
-#     break
-#
-# # print(total_reward)
-# test_env.close()
 
 #model_old.learn(total_timesteps=100000, log_interval=10, callback=callback)
 model_test.learn(total_timesteps=100000, log_interval=10, callback=callback)
@@ -181,93 +160,4 @@ plt.ylabel('Episode Rewards')
 plt.title('Carl parameters model, trained on regular environment')
 plt.show()
 
-
-
-env =gym.make("LunarLander-v4").unwrapped
-
-# set up matplotlib
-is_ipython = 'inline' in matplotlib.get_backend()
-if is_ipython:
-    from IPython import display
-
-plt.ion()
-
-paramshapes=model_test.get_parameters()
-
-def copy_dqn_weights(baselines_model):
-
-    torch_dqn =simple_dqn_torch_2020.DeepQNetwork(lr=0.001, n_actions=4, input_dims=[9], fc1_dims=256, fc2_dims=256)
-    model_params = baselines_model.get_parameters()
-    # Get only the policy parameters
-    model_params=model_params['policy']
-    policy_keys = [key for key in model_params.keys() if "pi" in key or "c" in key]
-    policy_params = [model_params[key] for key in policy_keys]
-
-    for (th_key, pytorch_param), key, policy_param in zip(torch_dqn.named_parameters(), policy_keys, policy_params):
-        param = policy_param.copy()
-        # Copy parameters from stable baselines model to pytorch model
-
-        # Conv layer
-        if len(param.shape) == 4:
-            # https://gist.github.com/chirag1992m/4c1f2cb27d7c138a4dc76aeddfe940c2
-            # Tensorflow 2D Convolutional layer: height * width * input channels * output channels
-            # PyTorch 2D Convolutional layer: output channels * input channels * height * width
-            param = np.transpose(param, (3, 2, 0, 1))
-
-        # weight of fully connected layer
-        if len(param.shape) == 2:
-            param = param.T
-
-        # bias
-        if 'b' in key:
-            param = param.squeeze()
-
-        param = torch.from_numpy(param)
-        pytorch_param.data.copy_(param.data.clone())
-
-    return torch_dqn
-
-dqn_torch_v=copy_dqn_weights(model_test)
-ct = 0
-
-for child in dqn_torch_v.children():
-    ct += 1
-    if ct < 2:
-        for param in child.parameters():
-            print(param)
-            print(ct)
-            param.requires_grad = False
-
-# #run corresponding video with obstacle
-# env = (gym.make("LunarLander-v4"))
-# #env= Monitor(env, "./gym-results", force=True)
-# observation = env.reset()
-# env.render()
-# total_reward = 0
-# while True:
-#   env.render()
-#   action, _states = model_test.predict(observation, deterministic=True)
-#   observation, reward, done, info = env.step(action)
-#   if done:
-#     break;
-#
-# env.close()
-# def wrap_env(env):
-#   env = Monitor(env, './video', force=True)
-#   env = RecordVideo(env, './video')
-#   return env
-
-# new_env = wrap_env(gym.make("LunarLander-v4"))
-# observation = new_env.reset()
-# total_reward = 0
-#
-# while True:
-#   new_env.render()
-#   action, states = model_test.predict(observation, deterministic=True)
-#   observation, reward, done, info = new_env.step(action)
-#   total_reward += reward
-#   if done:
-#     break;
-#
-# # print(total_reward)
-# new_env.close()
+model_test.save("dqn_lunar")
