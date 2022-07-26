@@ -4,7 +4,6 @@ import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
 
-from lunarlandingdraftcg_260722 import dqn_torch_v
 
 
 class DeepQNetwork(nn.Module):
@@ -79,6 +78,7 @@ class Agent:
         return action
 
     def learn(self):
+        print('calling machine learning phil''s function')
         if self.mem_cntr < self.batch_size:
             return
 

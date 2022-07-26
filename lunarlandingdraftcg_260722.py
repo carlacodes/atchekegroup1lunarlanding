@@ -147,10 +147,11 @@ and displaying it.
 To enable video, just do "env = wrap_env(env)""
 """
 
-
-#model_old.learn(total_timesteps=100000, log_interval=10, callback=callback)
+# model_old.learn(total_timesteps=100000, log_interval=10, callback=callback)
 model_test.learn(total_timesteps=100000, log_interval=10, callback=callback)
-loadedparams=model_test.get_parameters()
+model_test.save("dqn_lunar2")
+
+loadedparams = model_test.get_parameters()
 
 x, y = ts2xy(load_results(log_dir), 'timesteps')  # Organising the logged results in to a clean format for plotting.
 plt.plot(x, y)
@@ -159,5 +160,3 @@ plt.xlabel('Timesteps')
 plt.ylabel('Episode Rewards')
 plt.title('Carl parameters model, trained on regular environment')
 plt.show()
-
-model_test.save("dqn_lunar")
