@@ -10,6 +10,7 @@ import base64
 import numpy as np
 import matplotlib.pyplot as plt
 import stable_baselines3
+import gym
 from stable_baselines3 import DQN
 from stable_baselines3.common.results_plotter import ts2xy, load_results
 from stable_baselines3.common.callbacks import EvalCallback
@@ -44,7 +45,7 @@ nn_layers = [64,64] #This is the configuration of your neural network. Currently
 
 learning_rate = 0.001 #This is the step-size with which the gradient descent is carried out.
 #Tip: Use smaller step-sizes for larger networks.
-env = gym.make('LunarLander-v2')
+env = gym.make('LunarLander-v2', enable_wind=True, wind_power=15.0)
 log_dir = "/tmp/gym2007/"
 log_dir='C:/Users/carla/PycharmProjects/atchekegroup1lunarlanding/gym/'
 os.makedirs(log_dir, exist_ok=True)
@@ -147,15 +148,14 @@ plt.ylabel('Episode Rewards')
 plt.title('Carl parameters model, trained on regular environment')
 plt.show()
 
-
-#run corresponding video with wind
-env2 = (gym.make("LunarLander-v2"))
-observation = env2.reset()
+# run corresponding video with wind
+env = (gym.make("LunarLander-v2"))
+observation = env.reset()
 while True:
-  env2.render()
-  action, _states = model_test.predict(observation, deterministic=True)
-  observation, reward, done, info = env2.step(action)
-  if done:
-    break;
+    env.render()
+    action, _states = model_test.predict(observation, deterministic=True)
+    observation, reward, done, info = env.step(action)
+    if done:
+        break;
 
-env2.close()
+env.close()

@@ -15,10 +15,11 @@ from stable_baselines3 import DQN
 from stable_baselines3.common.results_plotter import ts2xy, load_results
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.env_util import make_atari_env
-
 import gym
 from gym import spaces
+from YoutubeCodeRepository.ReinforcementLearning.DeepQLearning import simple_dqn_torch_2020
 
+from gym.wrappers import Monitor, RecordVideo
 #
 # # @title Plotting/Video functions
 # from IPython.display import HTML
@@ -45,7 +46,7 @@ nn_layers = [64,64] #This is the configuration of your neural network. Currently
 
 learning_rate = 0.001 #This is the step-size with which the gradient descent is carried out.
 #Tip: Use smaller step-sizes for larger networks.
-env = gym.make('LunarLander-v2', enable_wind=True, wind_power = 15.0)
+env = gym.make('LunarLander-v4', enable_wind=True, wind_power=15.0)
 log_dir = "/tmp/gym2007/"
 log_dir='C:/Users/carla/PycharmProjects/atchekegroup1lunarlanding/gym/'
 os.makedirs(log_dir, exist_ok=True)
@@ -118,7 +119,7 @@ To enable video, just do "env = wrap_env(env)""
 """
 #
 
-# test_env = (gym.make("LunarLander-v2"))
+# test_env = (gym.make("LunarLander-v4"))
 # observation = test_env.reset()
 # total_reward = 0
 # while True:
@@ -139,6 +140,7 @@ To enable video, just do "env = wrap_env(env)""
 
 #model_old.learn(total_timesteps=100000, log_interval=10, callback=callback)
 model_test.learn(total_timesteps=100000, log_interval=10, callback=callback)
+loadedparams = model_test.get_parameters()
 
 x, y = ts2xy(load_results(log_dir), 'timesteps')  # Organising the logged results in to a clean format for plotting.
 plt.plot(x, y)
@@ -148,15 +150,36 @@ plt.ylabel('Episode Rewards')
 plt.title('Carl parameters model, trained on regular environment')
 plt.show()
 
-
-#run corresponding video with wind
-env = (gym.make("LunarLander-v2"))
+# run corresponding video with obstacle
+env = (gym.make("LunarLander-v4"))
+# env= Monitor(env, "./gym-results", force=True)
 observation = env.reset()
+env.render()
+total_reward = 0
 while True:
-  env.render()
-  action, _states = model_test.predict(observation, deterministic=True)
-  observation, reward, done, info = env.step(action)
-  if done:
-    break;
+    env.render()
+    action, _states = model_test.predict(observation, deterministic=True)
+    observation, reward, done, info = env.step(action)
+    if done:
+        break;
 
 env.close()
+# def wrap_env(env):
+#   env = Monitor(env, './video', force=True)
+#   env = RecordVideo(env, './video')
+#   return env
+
+# new_env = wrap_env(gym.make("LunarLander-v4"))
+# observation = new_env.reset()
+# total_reward = 0
+#
+# while True:
+#   new_env.render()
+#   action, states = model_test.predict(observation, deterministic=True)
+#   observation, reward, done, info = new_env.step(action)
+#   total_reward += reward
+#   if done:
+#     break;
+#
+# # print(total_reward)
+# new_env.close()
