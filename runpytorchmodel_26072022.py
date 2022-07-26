@@ -27,6 +27,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import torchvision.transforms as T
+from YoutubeCodeRepository.ReinforcementLearning.DeepQLearning import simple_dqn_torch_2020_2
 
 from stable_baselines3 import PPO
 
@@ -50,7 +51,7 @@ paramshapes = model_test.get_parameters()
 
 
 def copy_dqn_weights(baselines_model):
-    torch_dqn = simple_dqn_torch_2020.DeepQNetwork(lr=0.001, n_actions=4, input_dims=[9], fc1_dims=256, fc2_dims=256)
+    torch_dqn = simple_dqn_torch_2020_2.DeepQNetwork(lr=0.001, n_actions=4, input_dims=[9], fc1_dims=256, fc2_dims=256)
     model_params = baselines_model.get_parameters()
     # Get only the policy parameters
     model_params = model_params['policy']
