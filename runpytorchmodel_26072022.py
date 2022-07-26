@@ -26,8 +26,23 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print(device)
 from YoutubeCodeRepository.ReinforcementLearning.DeepQLearning import simple_dqn_torch_2020
 
+print(f"Is CUDA supported by this system?{torch.cuda.is_available()}")
+print(f"CUDA version: {torch.version.cuda}")
+
+# Storing ID of current CUDA device
+cuda_id = torch.cuda.current_device()
+print(f"ID of current CUDA device:{torch.cuda.current_device()}")
+
+print(f"Name of current CUDA device:{torch.cuda.get_device_name(cuda_id)}")
+import gym
+
+cuda = torch.device('cuda')  # Default CUDA device
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print(device)
 from stable_baselines3 import PPO
 from stable_baselines3 import DQN
 
@@ -108,6 +123,7 @@ def obs_to_torch(obs):
     # # Normalize
     # obs = obs / 255.0
     obs = th.tensor(obs).float()
+    obs = obs.to(device)
     return obs
 
 
@@ -116,10 +132,11 @@ env = gym.make('LunarLander-v4')
 episode_reward = 0
 done = False
 obs = env.reset()
+print(next(dqn_torch_v.parameters()).device)
 while not done:
-    action = th.argmax(dqn_torch_v(obs_to_torch(obs)).cuda()).item()
+    action = th.argmax(dqn_torch_v(obs_to_torch(obs))).item()
     # action = env.action_space.sample()
-    obs, reward, done, _ = env.step([action])
+    obs, reward, done, _ = env.step(action)
     episode_reward += reward
 
 print(episode_reward)
