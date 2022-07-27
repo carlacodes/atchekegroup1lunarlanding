@@ -1,4 +1,5 @@
 # quick functions for agent evaluation
+import numpy as np
 
 def jumpstart(y):
     return (y[0])
@@ -13,7 +14,7 @@ def total_reward_fnc(y):
     return np.sum(y)
 
 
-def transfer_ratio(y_transfer, y_reference):
+def transfer_ratio(y_transfer, y_reference, total_reward):
     transfer_ratio = total_reward(y_transfer) / total_reward(y_reference)
     return transfer_ratio
 
