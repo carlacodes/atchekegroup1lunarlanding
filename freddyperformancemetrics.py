@@ -63,3 +63,4 @@ def performance_metrics(y, rolling_avg=10, threshold=275, plot=True):
 
         sns.barplot(data=[threshold, time_threshold_80_of_max])
         plt.title('Threshold Time')
+        plt.show()
