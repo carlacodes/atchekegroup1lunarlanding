@@ -1,5 +1,8 @@
 # quick functions for agent evaluation
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 def jumpstart(y):
     return (y[0])
@@ -27,7 +30,7 @@ def max_reward_fnc(y):
     return np.max(y), np.argmax(y)
 
 
-def performance_metrics(y, rolling_avg=10, threshold=275):
+def performance_metrics(y, rolling_avg=10, threshold=275, plot=True):
     '''
     TODO: write plots functions
     '''
@@ -52,3 +55,11 @@ def performance_metrics(y, rolling_avg=10, threshold=275):
         \n Time to threshold(={threshold}): {time_threshold}/{n_timesteps} ({time_threshold * 100 / n_timesteps:.2f}% of training period) \
         \n Time to threshold(80% of max): {time_threshold_80_of_max}/{n_timesteps} ({time_threshold_80_of_max * 100 / n_timesteps:.2f}% of training period)" \
           )
+
+    if plot == True:
+        sns.scatterplot(idx_training_max, max_reward)
+        plt.title('Reward Over Timesteps')
+        plt.show()
+
+        sns.barplot(data=[threshold, time_threshold_80_of_max])
+        plt.title('Threshold Time')
