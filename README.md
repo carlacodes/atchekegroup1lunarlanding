@@ -8,3 +8,4 @@
 <br> Optimal hyperparameters for the DQN stablebaselines3 model: huggingface
 <br> Copying parameters over from stablebaslines3 to pytorch: https://colab.research.google.com/drive/1XwCWeZPnogjz7SLW2kLFXEJGmynQPI-4?usp=sharing
 
+Requirements are listed in package-list.txt
