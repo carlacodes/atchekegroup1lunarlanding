@@ -70,7 +70,8 @@ def performance_metrics(x, y, rolling_avg=10, threshold=275, plot=True):
         # plt.show()
         numpy_data = ([threshold, time_threshold_80_of_max])
 
-        plt.bar([0, 1], [time_threshold, time_threshold_80_of_max])
+        plt.bar([0, 1], [time_threshold, time_threshold_80_of_max], color=['green', 'blue'])
         plt.xticks([0, 1], labels=['Time to Max Threshold', 'Time to 80% max threshold'])
         plt.title('Threshold Time')
+        plt.ylabel('Episode Number')
         plt.show()
