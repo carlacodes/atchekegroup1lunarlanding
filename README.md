@@ -1,4 +1,4 @@
-# transferlanders' NMA Deep LEarning Repository
+# transferlanders' NMA Deep Learning Repository
 <i> Transfer learning in the context of the lunar lander problem. </i>
 
 ## Welcome to the transferlearner's shared Lunar Lander RL repository.
